@@ -12,16 +12,22 @@ echo "🔄 Updating system..."
 apt update && apt upgrade -y
 
 echo "📦 Installing packages..."
+echo iptables-persistent iptables-persistent/autosave_v4 boolean true | debconf-set-selections
+echo iptables-persistent iptables-persistent/autosave_v6 boolean true | debconf-set-selections
 apt install -y hostapd dnsmasq iptables-persistent unbound curl git python3-flask python3-venv
 
 echo "📡 Configuring wlan1 static IP..."
-grep -q "$HOTSPOT_INTERFACE" /etc/dhcpcd.conf || cat >> /etc/dhcpcd.conf <<EOF
+echo "🌐 Configuring wlan1 static IP using NetworkManager..."
+nmcli device set wlan1 managed yes
+nmcli connection add type wifi ifname wlan1 con-name travelpi-hotspot \
+    autoconnect yes ssid travelPi
+nmcli connection modify travelpi-hotspot ipv4.method manual ipv4.addresses 192.168.50.1/24
+nmcli connection modify travelpi-hotspot 802-11-wireless.mode ap 802-11-wireless.band bg \
+    802-11-wireless.channel 7
+nmcli connection modify travelpi-hotspot wifi-sec.key-mgmt wpa-psk
+nmcli connection modify travelpi-hotspot wifi-sec.psk "heslo123"
+nmcli connection modify travelpi-hotspot connection.autoconnect yes
 
-interface $HOTSPOT_INTERFACE
-    static ip_address=${STATIC_IP}/24
-    nohook wpa_supplicant
-EOF
-systemctl restart dhcpcd
 
 echo "📶 Configuring hostapd..."
 cp hostapd.conf /etc/hostapd/hostapd.conf
