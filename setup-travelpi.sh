@@ -88,4 +88,12 @@ echo "🔧 Installing systemd service..."
 cp ../travelpi-api.service /etc/systemd/system/
 systemctl enable travelpi-api.service
 
+
+echo "📦 Installing Pi-hole non-interactively..."
+curl -sSL https://install.pi-hole.net | bash /dev/stdin --unattended
+
+echo "🔧 Configuring Pi-hole to use Unbound..."
+sed -i 's/^PIHOLE_DNS_.*$/PIHOLE_DNS_1=127.0.0.1#5335/' /etc/pihole/setupVars.conf
+pihole -a setdns 127.0.0.1#5335
+pihole restartdns
 echo "✅ Setup complete! Reboot to start hotspot and API."
