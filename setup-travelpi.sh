@@ -91,7 +91,8 @@ python3 -m venv venv
 venv/bin/pip install -r requirements.txt
 
 echo "🔧 Installing systemd service..."
-cp ../travelpi-setup /etc/systemd/system/
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cp "$SCRIPT_DIR/travelpi-api.service" /etc/systemd/system/
 systemctl enable travelpi-api.service
 
 
