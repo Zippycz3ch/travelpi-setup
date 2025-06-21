@@ -3,21 +3,21 @@ set -e
 
 HOTSPOT_SSID="travelPi"
 HOTSPOT_PASSWORD="heslo123"
-HOTSPOT_INTERFACE="wlan1"
-UPSTREAM_INTERFACE="wlan0"
+HOTSPOT_INTERFACE="wlan0"
+UPSTREAM_INTERFACE="wlan1"
 STATIC_IP="192.168.50.1"
 API_TOKEN="changeme123"
 
-echo "🔄 Updating system..."
+echo "Updating system..."
 apt update && apt upgrade -y
 
-echo "📦 Installing packages..."
+echo "Installing packages..."
 echo iptables-persistent iptables-persistent/autosave_v4 boolean true | debconf-set-selections
 echo iptables-persistent iptables-persistent/autosave_v6 boolean true | debconf-set-selections
 apt install -y hostapd dnsmasq iptables-persistent unbound curl git python3-flask python3-venv
 
-echo "📡 Configuring wlan1 static IP..."
-echo "🌐 Configuring wlan1 static IP using NetworkManager..."
+echo "Configuring wlan1 static IP..."
+echo "Configuring wlan1 static IP using NetworkManager..."
 nmcli device set wlan1 managed yes
 nmcli connection add type wifi ifname wlan1 con-name travelpi-hotspot \
     autoconnect yes ssid travelPi
@@ -29,18 +29,18 @@ nmcli connection modify travelpi-hotspot wifi-sec.psk "heslo123"
 nmcli connection modify travelpi-hotspot connection.autoconnect yes
 
 
-echo "📶 Configuring hostapd..."
+echo "Configuring hostapd..."
 cp hostapd.conf /etc/hostapd/hostapd.conf
 sed -i "s|#DAEMON_CONF=.*|DAEMON_CONF="/etc/hostapd/hostapd.conf"|" /etc/default/hostapd
 systemctl unmask hostapd
 systemctl enable hostapd
 
-echo "🌐 Configuring dnsmasq..."
+echo "Configuring dnsmasq..."
 [ -f /etc/dnsmasq.conf ] && mv /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
 cp dnsmasq.conf /etc/dnsmasq.conf
 systemctl restart dnsmasq
 
-echo "🧠 Installing and configuring Unbound..."
+echo "Installing and configuring Unbound..."
 ROOT_HINTS="/var/lib/unbound/root.hints"
 curl -o $ROOT_HINTS https://www.internic.net/domain/named.cache
 
