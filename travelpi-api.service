@@ -1,0 +1,12 @@
+[Unit]
+Description=TravelPi Wi-Fi Control API
+After=network.target
+
+[Service]
+ExecStart=/opt/travelpi-api/venv/bin/python app.py
+WorkingDirectory=/opt/travelpi-api
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
