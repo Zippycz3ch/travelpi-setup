@@ -1,12 +1,12 @@
 [Unit]
-Description=TravelPi Wi-Fi Control API
+Description=TravelPi Flask API
 After=network.target
 
 [Service]
-ExecStart=/opt/travelpi-api/venv/bin/python app.py
-WorkingDirectory=/opt/travelpi-api
-Restart=always
 User=root
+WorkingDirectory=/opt/travelpi-api
+ExecStart=/opt/travelpi-api/venv/bin/python app.py
+Restart=always
 
 [Install]
 WantedBy=multi-user.target
