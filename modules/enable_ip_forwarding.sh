@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
-
-# Placeholder for enable_ip_forwarding.sh
-echo "Running enable_ip_forwarding.sh..."
+echo "[INFO] Enabling IPv4 forwarding..."
+sed -i 's/^#* *net.ipv4.ip_forward=.*/net.ipv4.ip_forward=1/' /etc/sysctl.conf || echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+sysctl -p /etc/sysctl.conf

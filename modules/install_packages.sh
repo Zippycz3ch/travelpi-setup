@@ -1,5 +1,4 @@
 #!/bin/bash
 set -e
-
-# Placeholder for install_packages.sh
-echo "Running install_packages.sh..."
+echo "[INFO] Installing required packages..."
+apt-get install -y hostapd dnsmasq iptables-persistent unbound curl git python3-flask python3-venv network-manager

@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
-
-# Placeholder for install_pi_hole.sh
-echo "Running install_pi_hole.sh..."
+echo "[INFO] Installing Pi-hole..."
+cp "$(dirname "$0")/../setupVars.conf" /etc/pihole/setupVars.conf
+curl -sSL https://install.pi-hole.net | bash /dev/stdin --unattended

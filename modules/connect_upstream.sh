@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
-
-# Placeholder for connect_upstream.sh
-echo "Running connect_upstream.sh..."
+echo "[INFO] Connecting to upstream Wi-Fi..."
+nmcli device set wlan1 managed yes
+nmcli device wifi connect "iot" password "greta691337" ifname wlan1

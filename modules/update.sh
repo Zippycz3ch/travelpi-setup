@@ -1,5 +1,4 @@
 #!/bin/bash
 set -e
-
-# Placeholder for update.sh
-echo "Running update.sh..."
+echo "[INFO] Updating system packages..."
+apt-get update && apt-get upgrade -y

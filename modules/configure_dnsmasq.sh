@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
-
-# Placeholder for configure_dnsmasq.sh
-echo "Running configure_dnsmasq.sh..."
+echo "[INFO] Configuring dnsmasq..."
+cp "$(dirname "$0")/../dnsmasq.conf" /etc/dnsmasq.conf
+systemctl enable dnsmasq
+systemctl restart dnsmasq
