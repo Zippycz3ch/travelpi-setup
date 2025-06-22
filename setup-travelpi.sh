@@ -24,13 +24,20 @@ apt install -y hostapd dnsmasq iptables-persistent unbound curl git python3-flas
 echo "📶 Configuring hotspot on $HOTSPOT_INTERFACE using NetworkManager..."
 nmcli device set $HOTSPOT_INTERFACE managed yes
 nmcli connection delete travelpi-hotspot 2>/dev/null || true
-nmcli connection add type wifi ifname $HOTSPOT_INTERFACE con-name travelpi-hotspot ssid "$HOTSPOT_SSID" -- wifi.mode ap 802-11-wireless.band bg 802-11-wireless.channel 7
+
+nmcli connection add type wifi ifname $HOTSPOT_INTERFACE con-name travelpi-hotspot ssid "$HOTSPOT_SSID" \
+    wifi.mode ap 802-11-wireless.band bg 802-11-wireless.channel 7
+
 nmcli connection modify travelpi-hotspot ipv4.method manual ipv4.addresses "$STATIC_IP/24"
 nmcli connection modify travelpi-hotspot ipv4.gateway "$STATIC_IP"
 nmcli connection modify travelpi-hotspot ipv4.dns "$STATIC_IP"
-nmcli connection modify travelpi-hotspot 802-11-wireless.security "wpa-psk"
+
+# ✅ Add key management and password after defining the base connection
+nmcli connection modify travelpi-hotspot wifi-sec.key-mgmt wpa-psk
 nmcli connection modify travelpi-hotspot wifi-sec.psk "$HOTSPOT_PASSWORD"
+
 nmcli connection modify travelpi-hotspot connection.autoconnect yes
+
 
 echo "📡 Connecting to upstream Wi-Fi on $UPSTREAM_INTERFACE..."
 nmcli device set $UPSTREAM_INTERFACE managed yes
